@@ -10,10 +10,11 @@ from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from dotenv import load_dotenv
 
-import tensorflow as tf  # ✅ FIXED IMPORT
+# ❌ REMOVE tensorflow import (not needed anymore)
+# import tensorflow as tf
 
 # ─────────────────────────────────────────────
-# ENV + PATH FIX
+# ENV + PATH
 # ─────────────────────────────────────────────
 
 load_dotenv()
@@ -34,21 +35,12 @@ from deployment.predict import predict_image
 from chatbot.chatbot import FarmingChatbot
 from ai_engine.solution_engine import get_full_solution
 
-# ─────────────────────────────────────────────
-# LOAD MODEL ONCE (🔥 IMPORTANT)
-# ─────────────────────────────────────────────
-
-MODEL_PATH = os.path.join(BASE_DIR, "model_fixed.h5")
-
-_model = None
-
-def get_model():
-    global _model
-    if _model is None:
-        print("⏳ Loading model...")
-        _model = tf.keras.models.load_model(MODEL_PATH, compile=False)
-        print("✅ Model loaded successfully")
-    return _model
+# ❌ REMOVE THIS ENTIRE BLOCK
+# _model = None
+# def get_model():
+#     global _model
+#     if _model is None:
+#         _model = tf.keras.models.load_model(MODEL_PATH)
 
 # ─────────────────────────────────────────────
 # APP INIT
@@ -102,7 +94,7 @@ async def health():
     return {"status": "ok"}
 
 # ─────────────────────────────────────────────
-# PREDICT
+# PREDICT (FIXED)
 # ─────────────────────────────────────────────
 
 @app.post("/predict")
@@ -117,9 +109,8 @@ async def predict(
     image_bytes = await file.read()
 
     try:
-        model = get_model()  # ✅ Load once
-
-        result = predict_image(image_bytes, class_name, model)  # ✅ pass model
+        # ✅ NO MODEL LOADING HERE
+        result = predict_image(image_bytes, class_name)
 
         solution = get_full_solution(
             result["class_name"],
