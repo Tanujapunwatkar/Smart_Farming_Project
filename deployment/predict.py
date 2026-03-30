@@ -46,7 +46,7 @@ def preprocess_image(image_bytes: bytes):
 
 
 # ✅ PREDICT
-def predict_image(image_bytes: bytes):
+def predict_image(image_bytes: bytes, class_name=None):
 
     model = load_model()
     img = preprocess_image(image_bytes)
@@ -56,7 +56,9 @@ def predict_image(image_bytes: bytes):
     is_healthy = prob < THRESHOLD
     confidence = (1 - prob) * 100 if is_healthy else prob * 100
 
-    class_name = "Tomato_healthy" if is_healthy else "Tomato_Late_blight"
+    # ✅ Use predicted class if not provided
+    if class_name is None:
+        class_name = "Tomato_healthy" if is_healthy else "Tomato_Late_blight"
 
     solution = get_full_solution(class_name, confidence, is_healthy)
 
@@ -64,5 +66,6 @@ def predict_image(image_bytes: bytes):
         "prediction": "Healthy" if is_healthy else "Diseased",
         "confidence": round(confidence, 2),
         "class_name": class_name,
+        "is_healthy": is_healthy,   # ✅ important for app.py
         "ai_summary": solution["ai_summary"]
     }
