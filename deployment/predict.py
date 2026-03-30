@@ -19,11 +19,15 @@ def load_model():
     if _model is None:
         print("⏳ Loading model from Hugging Face...")
 
-        _model = keras.saving.load_model(
-            "hf://Tanupunwatkar/Smart_Farming_model",
-            compile=False
-        )
-
+        try:
+            _model = keras.saving.load_model(
+                "hf://Tanupunwatkar/Smart_Farming_model/best_model.keras",
+                compile=False
+            )
+        except Exception as e:
+            print("❌ Error loading model:", e)
+            raise RuntimeError("Model loading failed")
+        
         print("✅ Model LOADED SUCCESSFULLY")
 
     return _model
