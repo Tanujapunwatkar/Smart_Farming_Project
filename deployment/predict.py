@@ -2,7 +2,8 @@
 
 import numpy as np
 import cv2
-import keras
+import tensorflow as tf
+from huggingface_hub import hf_hub_download
 
 from ai_engine.solution_engine import get_full_solution
 
@@ -11,29 +12,32 @@ THRESHOLD = 0.35
 
 _model = None
 
-
-# ✅ LOAD MODEL FROM HUGGING FACE ONLY
+# ✅ LOAD MODEL FROM HUGGING FACE (FINAL WORKING)
 def load_model():
     global _model
 
     if _model is None:
-        print("⏳ Loading model from Hugging Face...")
-
         try:
-            _model = keras.saving.load_model(
-                "hf://Tanupunwatkar/Smart_Farming_model/best_model.keras",
-                compile=False
+            print("⏳ Downloading model from Hugging Face...")
+
+            # Download the model file to local cache
+            model_path = hf_hub_download(
+                repo_id="Tanupunwatkar/Smart_Farming_model",
+                filename="best_model.keras"
             )
+            print("📁 Model downloaded to:", model_path)
+
+            # Load Keras model
+            _model = tf.keras.models.load_model(model_path, compile=False)
+            print("✅ Model LOADED SUCCESSFULLY")
+
         except Exception as e:
-            print("❌ Error loading model:", e)
-            raise RuntimeError("Model loading failed")
-        
-        print("✅ Model LOADED SUCCESSFULLY")
+            print("❌ REAL ERROR:", str(e))
+            raise RuntimeError(str(e))
 
     return _model
 
-
-# ✅ PREPROCESS
+# ✅ PREPROCESS IMAGE
 def preprocess_image(image_bytes: bytes):
     nparr = np.frombuffer(image_bytes, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
@@ -48,10 +52,8 @@ def preprocess_image(image_bytes: bytes):
 
     return img
 
-
 # ✅ PREDICT
 def predict_image(image_bytes: bytes, class_name=None):
-
     model = load_model()
     img = preprocess_image(image_bytes)
 
@@ -60,7 +62,6 @@ def predict_image(image_bytes: bytes, class_name=None):
     is_healthy = prob < THRESHOLD
     confidence = (1 - prob) * 100 if is_healthy else prob * 100
 
-    # ✅ Use predicted class if not provided
     if class_name is None:
         class_name = "Tomato_healthy" if is_healthy else "Tomato_Late_blight"
 
@@ -70,6 +71,6 @@ def predict_image(image_bytes: bytes, class_name=None):
         "prediction": "Healthy" if is_healthy else "Diseased",
         "confidence": round(confidence, 2),
         "class_name": class_name,
-        "is_healthy": is_healthy,   # ✅ important for app.py
+        "is_healthy": is_healthy,
         "ai_summary": solution["ai_summary"]
     }
