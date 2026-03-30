@@ -1,0 +1,231 @@
+{
+  "Tomato_Bacterial_spot": {
+    "cause": "Xanthomonas bacteria — spreads through rain, wind, contaminated tools",
+    "severity": "Medium-High",
+    "symptoms": "Small dark brown spots with yellow halos on leaves and fruit",
+    "treatment": [
+      "Remove and destroy all infected leaves immediately",
+      "Apply copper-based bactericide (copper hydroxide) every 7 days",
+      "Avoid overhead irrigation — water at the base only",
+      "Disinfect all farming tools with bleach solution"
+    ],
+    "prevention": [
+      "Use certified disease-free seeds",
+      "Rotate crops every season",
+      "Maintain proper plant spacing for air circulation",
+      "Avoid working in fields when plants are wet"
+    ],
+    "recovery_days": "14-21 days with proper treatment"
+  },
+  "Tomato_Early_blight": {
+    "cause": "Alternaria solani fungus — thrives in warm humid conditions",
+    "severity": "Medium",
+    "symptoms": "Dark brown spots with concentric rings (target pattern) on older leaves",
+    "treatment": [
+      "Remove infected lower leaves immediately",
+      "Apply chlorothalonil or mancozeb fungicide every 7-10 days",
+      "Improve air circulation by pruning dense foliage",
+      "Mulch around base to prevent soil splash"
+    ],
+    "prevention": [
+      "Avoid overhead watering",
+      "Rotate crops with non-solanaceous plants",
+      "Use resistant tomato varieties",
+      "Apply preventive fungicide at first sign of disease"
+    ],
+    "recovery_days": "10-14 days with treatment"
+  },
+  "Tomato_Late_blight": {
+    "cause": "Phytophthora infestans — spreads rapidly in cool wet weather",
+    "severity": "Very High — can destroy entire crop in 7-10 days",
+    "symptoms": "Water-soaked grey-green lesions on leaves, white mold on underside",
+    "treatment": [
+      "Remove and destroy ALL infected plants — do not compost",
+      "Apply mancozeb or copper fungicide immediately",
+      "Spray every 5-7 days during wet weather",
+      "Harvest any remaining healthy fruit immediately"
+    ],
+    "prevention": [
+      "Plant in well-drained soil with good air circulation",
+      "Avoid overhead irrigation",
+      "Monitor weather — spray preventively before rain",
+      "Use late-blight resistant varieties"
+    ],
+    "recovery_days": "Severe — consider replanting if more than 30% infected"
+  },
+  "Tomato_Leaf_Mold": {
+    "cause": "Passalora fulva fungus — thrives in high humidity greenhouses",
+    "severity": "Medium",
+    "symptoms": "Yellow patches on upper leaf, olive-green mold on underside",
+    "treatment": [
+      "Reduce greenhouse humidity below 85%",
+      "Increase ventilation and air circulation",
+      "Apply chlorothalonil or copper fungicide",
+      "Remove heavily infected leaves"
+    ],
+    "prevention": [
+      "Keep humidity below 85%",
+      "Ensure proper plant spacing",
+      "Use resistant varieties",
+      "Avoid wetting foliage when watering"
+    ],
+    "recovery_days": "7-14 days with improved conditions"
+  },
+  "Tomato_Septoria_leaf_spot": {
+    "cause": "Septoria lycopersici fungus — spreads through rain and tools",
+    "severity": "Medium",
+    "symptoms": "Small circular spots with dark borders and grey centers on lower leaves",
+    "treatment": [
+      "Remove infected leaves starting from bottom",
+      "Apply mancozeb or chlorothalonil fungicide",
+      "Spray every 7-10 days",
+      "Avoid wetting leaves when watering"
+    ],
+    "prevention": [
+      "Crop rotation every 2-3 years",
+      "Remove plant debris after harvest",
+      "Stake plants to improve air circulation",
+      "Mulch to prevent soil splash"
+    ],
+    "recovery_days": "10-14 days"
+  },
+  "Tomato_Spider_mites_Two_spotted_spider_mite": {
+    "cause": "Tetranychus urticae mites — thrive in hot dry conditions",
+    "severity": "Medium-High",
+    "symptoms": "Tiny yellow/white spots on leaves, fine webbing on plant, bronze discoloration",
+    "treatment": [
+      "Spray plants with strong water jet to dislodge mites",
+      "Apply neem oil or insecticidal soap every 5-7 days",
+      "Use miticide (abamectin) for severe infestations",
+      "Increase humidity around plants"
+    ],
+    "prevention": [
+      "Keep plants well watered — mites prefer dry conditions",
+      "Introduce predatory mites (biological control)",
+      "Avoid excessive nitrogen fertilizer",
+      "Inspect plants weekly especially in hot weather"
+    ],
+    "recovery_days": "7-14 days with consistent treatment"
+  },
+  "Tomato__Target_Spot": {
+    "cause": "Corynespora cassiicola fungus — favors warm humid conditions",
+    "severity": "Medium",
+    "symptoms": "Dark brown spots with concentric rings on leaves and fruit",
+    "treatment": [
+      "Apply azoxystrobin or chlorothalonil fungicide",
+      "Remove infected plant material",
+      "Improve air circulation",
+      "Spray every 7-14 days"
+    ],
+    "prevention": [
+      "Avoid overhead irrigation",
+      "Maintain proper plant spacing",
+      "Rotate crops annually",
+      "Use resistant varieties when available"
+    ],
+    "recovery_days": "10-21 days"
+  },
+  "Tomato__Tomato_mosaic_virus": {
+    "cause": "Tomato mosaic virus (ToMV) — spread by contact, tools, insects",
+    "severity": "High — no cure, must remove plant",
+    "symptoms": "Mosaic light/dark green pattern on leaves, distorted growth, stunted plant",
+    "treatment": [
+      "REMOVE infected plants immediately — no chemical cure",
+      "Do not compost infected material — burn or bag it",
+      "Disinfect all tools with 10% bleach solution",
+      "Wash hands thoroughly before handling healthy plants"
+    ],
+    "prevention": [
+      "Use virus-free certified seeds",
+      "Control aphids and other insect vectors",
+      "Do not smoke near plants — tobacco can carry virus",
+      "Use resistant varieties (look for ToMV resistance)"
+    ],
+    "recovery_days": "No recovery — remove and replant"
+  },
+  "Tomato__Tomato_YellowLeaf__Curl_Virus": {
+    "cause": "TYLCV virus — transmitted by whiteflies",
+    "severity": "Very High — no cure, major yield loss",
+    "symptoms": "Yellowing and curling of leaves, stunted growth, reduced fruit set",
+    "treatment": [
+      "REMOVE severely infected plants immediately",
+      "Control whitefly population with imidacloprid or neem oil",
+      "Use yellow sticky traps to monitor and catch whiteflies",
+      "Apply reflective mulch to repel whiteflies"
+    ],
+    "prevention": [
+      "Use TYLCV-resistant tomato varieties",
+      "Install insect-proof netting in greenhouses",
+      "Plant border crops to trap whiteflies",
+      "Monitor regularly and act at first sign of whiteflies"
+    ],
+    "recovery_days": "No recovery — prevention is key"
+  },
+  "Potato___Early_blight": {
+    "cause": "Alternaria solani — favors warm days and cool nights",
+    "severity": "Medium",
+    "symptoms": "Dark brown lesions with concentric rings on older leaves",
+    "treatment": [
+      "Apply mancozeb or chlorothalonil fungicide",
+      "Remove infected leaves",
+      "Spray every 7-10 days",
+      "Ensure adequate potassium fertilization"
+    ],
+    "prevention": [
+      "Use certified disease-free seed potatoes",
+      "Rotate crops every 3 years",
+      "Avoid excessive nitrogen",
+      "Hill soil around plants to prevent tuber exposure"
+    ],
+    "recovery_days": "10-14 days"
+  },
+  "Potato___Late_blight": {
+    "cause": "Phytophthora infestans — same pathogen as tomato late blight",
+    "severity": "Very High — caused the Irish Potato Famine",
+    "symptoms": "Water-soaked lesions on leaves, white fungal growth, rapid browning",
+    "treatment": [
+      "Apply metalaxyl or cymoxanil fungicide immediately",
+      "Remove and destroy all infected plant material",
+      "Spray every 5-7 days in wet conditions",
+      "Do not harvest during wet weather"
+    ],
+    "prevention": [
+      "Use certified blight-resistant varieties",
+      "Ensure good drainage",
+      "Apply preventive fungicide before rainy season",
+      "Destroy volunteer potato plants"
+    ],
+    "recovery_days": "Severe — act within 24 hours of detection"
+  },
+  "Pepper__bell___Bacterial_spot": {
+    "cause": "Xanthomonas bacteria — spread by rain and contaminated tools",
+    "severity": "Medium-High",
+    "symptoms": "Small water-soaked spots turning brown with yellow halos on leaves",
+    "treatment": [
+      "Apply copper bactericide immediately",
+      "Remove infected leaves and fruit",
+      "Avoid overhead irrigation",
+      "Spray every 7 days during humid weather"
+    ],
+    "prevention": [
+      "Use disease-free certified seeds",
+      "Avoid working in wet conditions",
+      "Rotate crops every 2-3 years",
+      "Disinfect tools regularly"
+    ],
+    "recovery_days": "14-21 days"
+  },
+  "healthy": {
+    "cause": "No disease detected",
+    "severity": "None",
+    "symptoms": "Plant appears healthy",
+    "treatment": ["No treatment needed"],
+    "prevention": [
+      "Continue regular monitoring",
+      "Maintain proper watering schedule",
+      "Ensure adequate nutrition",
+      "Keep field clean from debris"
+    ],
+    "recovery_days": "N/A"
+  }
+}

@@ -1,0 +1,40 @@
+# ─────────────────────────────────────────────
+# CORE — image processing & ML
+# ─────────────────────────────────────────────
+tensorflow
+keras
+numpy
+opencv-python
+scikit-learn
+pandas
+Pillow
+tqdm
+imbalanced-learn
+
+# ─────────────────────────────────────────────
+# VISUALIZATION
+# ─────────────────────────────────────────────
+matplotlib
+seaborn
+
+# ─────────────────────────────────────────────
+# API & DEPLOYMENT
+# ─────────────────────────────────────────────
+fastapi
+uvicorn
+python-multipart
+pydantic
+aiofiles
+
+# ─────────────────────────────────────────────
+# AI CHATBOT
+# ─────────────────────────────────────────────
+anthropic
+google-genai
+
+# ─────────────────────────────────────────────
+# UTILITIES
+# ─────────────────────────────────────────────
+python-dotenv
+requests
+huggingface_hub

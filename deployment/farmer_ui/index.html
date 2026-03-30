@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Farming AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --g1:#0f3d08;--g2:#1a5c0f;--g3:#246b17;--g4:#2e8020;
+  --g-light:#e8f5e2;--g-pale:#f4fbf0;--g-mid:#3da829;
+  --text:#111827;--muted:#6b7280;--border:#d1e8c8;
+  --card:#ffffff;--page:#f0f7eb;
+  --font:'Sora',sans-serif;
+  --font-deva:'Noto Sans Devanagari','Sora',sans-serif;
+}
+body{font-family:var(--font);background:var(--page);color:var(--text);min-height:100vh}
+
+/* SCREEN SYSTEM */
+.screen{display:none;min-height:100vh;flex-direction:column}
+.screen.active{display:flex}
+
+/* SCREEN 1 — LANGUAGE */
+#langScreen{
+  align-items:center;justify-content:center;
+  background:radial-gradient(ellipse at 60% 40%,#1a5c0f 0%,#0f3d08 60%,#071f04 100%);
+  padding:2rem;
+}
+.lang-card{
+  background:rgba(255,255,255,.97);border-radius:28px;
+  padding:3rem 2.5rem;max-width:460px;width:100%;
+  text-align:center;box-shadow:0 32px 80px rgba(0,0,0,.35);
+}
+.lang-logo{font-size:4rem;display:block;margin-bottom:.5rem;
+  animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.lang-brand{font-size:1.8rem;font-weight:800;color:var(--g1);letter-spacing:-.5px}
+.lang-sub{font-size:.85rem;color:var(--muted);margin:.4rem 0 2rem;line-height:1.6;font-family:var(--font-deva)}
+.lang-grid{display:flex;flex-direction:column;gap:.75rem}
+.lang-opt{
+  display:flex;align-items:center;gap:1rem;
+  padding:1.1rem 1.5rem;border:2px solid var(--border);
+  border-radius:16px;background:var(--g-pale);cursor:pointer;
+  transition:all .25s;text-align:left;width:100%;
+}
+.lang-opt:hover{
+  border-color:var(--g3);background:var(--g-light);
+  transform:translateY(-3px);box-shadow:0 8px 24px rgba(36,107,23,.2);
+}
+.lang-flag{font-size:2.2rem;flex-shrink:0}
+.lang-name{font-size:1.1rem;font-weight:700;color:var(--g1)}
+.lang-native{font-size:.82rem;color:var(--muted);font-family:var(--font-deva)}
+
+/* SCREEN 2 — MAIN APP */
+#appScreen{height:100vh;overflow:hidden}
+
+/* Header */
+.hdr{
+  background:var(--g1);color:#fff;
+  padding:0 1.5rem;height:60px;
+  display:flex;align-items:center;justify-content:space-between;
+  box-shadow:0 2px 16px rgba(0,0,0,.25);flex-shrink:0;
+}
+.hdr-brand{display:flex;align-items:center;gap:10px}
+.hdr-brand h1{font-size:1.1rem;font-weight:800}
+.hdr-brand p{font-size:.7rem;opacity:.65;font-family:var(--font-deva)}
+.lang-pills{
+  display:flex;background:rgba(255,255,255,.12);
+  border-radius:24px;padding:3px;gap:2px;
+}
+.lang-pill{
+  padding:4px 12px;border:none;border-radius:20px;
+  background:none;color:rgba(255,255,255,.65);
+  font-size:.75rem;font-weight:600;cursor:pointer;
+  transition:all .2s;font-family:var(--font-deva);
+}
+.lang-pill.active{background:#fff;color:var(--g1)}
+
+/* Layout */
+.layout{display:flex;height:calc(100vh - 60px);overflow:hidden}
+
+/* Left panel */
+.lpanel{
+  width:420px;min-width:380px;
+  background:var(--card);border-right:1px solid var(--border);
+  overflow-y:auto;display:flex;flex-direction:column;
+}
+.lpanel::-webkit-scrollbar{width:4px}
+.lpanel::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+
+/* Right panel */
+.rpanel{flex:1;display:flex;flex-direction:column;background:var(--g-pale);overflow:hidden}
+
+/* Cards */
+.pcard{
+  margin:.85rem;background:var(--card);
+  border-radius:18px;padding:1.25rem;
+  border:1px solid var(--border);
+  box-shadow:0 2px 12px rgba(15,61,8,.06);
+}
+.pcard-title{
+  font-size:.72rem;font-weight:700;color:var(--g3);
+  text-transform:uppercase;letter-spacing:1px;
+  margin-bottom:1rem;display:flex;align-items:center;gap:6px;
+}
+
+/* Upload zone */
+.upzone{
+  border:2.5px dashed #a8d89e;border-radius:14px;
+  padding:2rem 1rem;text-align:center;cursor:pointer;
+  transition:all .25s;background:var(--g-pale);
+}
+.upzone:hover,.upzone.over{border-color:var(--g3);background:var(--g-light)}
+.upzone input{display:none}
+.up-icon{font-size:3rem;display:block;transition:transform .25s}
+.upzone:hover .up-icon{transform:scale(1.1)}
+.up-hint{font-size:.85rem;color:var(--muted);margin-top:.5rem;line-height:1.5;font-family:var(--font-deva)}
+.up-hint strong{color:var(--g3)}
+
+#prevImg{
+  width:100%;max-height:220px;object-fit:cover;
+  border-radius:12px;margin-top:.75rem;display:none;
+  border:1px solid var(--border);
+}
+
+.scan-btn{
+  width:100%;margin-top:.75rem;padding:.9rem;
+  background:linear-gradient(135deg,var(--g3),var(--g4));
+  color:#fff;border:none;border-radius:12px;
+  font-size:.95rem;font-weight:700;cursor:pointer;
+  transition:all .2s;font-family:var(--font-deva);
+  box-shadow:0 4px 16px rgba(36,107,23,.35);
+}
+.scan-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 24px rgba(36,107,23,.4)}
+.scan-btn:disabled{background:#9ca3af;cursor:not-allowed;box-shadow:none;transform:none}
+
+/* Result */
+#resCard{display:none}
+.res-badge{
+  display:flex;align-items:center;gap:12px;
+  padding:1rem 1.25rem;border-radius:14px;margin-bottom:1rem;
+}
+.res-badge.healthy{background:#d1fae5;border:1.5px solid #6ee7b7}
+.res-badge.diseased{background:#fee2e2;border:1.5px solid #fca5a5}
+.res-icon{font-size:2rem}
+.res-name{font-size:1.1rem;font-weight:800;font-family:var(--font-deva)}
+.res-conf{font-size:.78rem;color:var(--muted);margin-top:2px}
+
+.cbar-wrap{background:#e5e7eb;border-radius:10px;height:8px;margin-bottom:1rem;overflow:hidden}
+.cbar-fill{
+  height:100%;border-radius:10px;
+  background:linear-gradient(90deg,var(--g3),#7bc94a);
+  transition:width 1.2s cubic-bezier(.4,0,.2,1);width:0%
+}
+
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1rem}
+.info-cell{background:var(--g-pale);border:1px solid var(--border);border-radius:10px;padding:.65rem .8rem}
+.info-lbl{font-size:.67rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.4px;font-family:var(--font-deva)}
+.info-val{font-size:.85rem;font-weight:700;margin-top:3px;font-family:var(--font-deva)}
+
+/* AI Summary */
+.ai-card{
+  background:linear-gradient(135deg,#f0fdf4,#ecfdf5);
+  border:1px solid #a7f3d0;border-radius:16px;
+  padding:1.1rem;margin-bottom:1rem;
+}
+.ai-card-hdr{display:flex;align-items:center;gap:8px;margin-bottom:.8rem}
+.ai-badge{
+  background:var(--g2);color:#fff;
+  font-size:.68rem;font-weight:700;
+  padding:3px 10px;border-radius:20px;letter-spacing:.5px;
+}
+.ai-text{
+  font-size:.85rem;line-height:1.8;color:#1f2937;
+  white-space:pre-wrap;max-height:200px;overflow-y:auto;
+  font-family:var(--font-deva);
+}
+
+/* Treatment */
+.treat-list{list-style:none}
+.treat-item{
+  display:flex;gap:10px;padding:.6rem 0;
+  border-bottom:1px solid var(--border);
+  font-size:.84rem;line-height:1.5;align-items:flex-start;
+  font-family:var(--font-deva);
+}
+.treat-item:last-child{border-bottom:none}
+.treat-num{
+  width:24px;height:24px;border-radius:50%;
+  background:var(--g3);color:#fff;
+  font-size:.72rem;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:1px;
+}
+
+/* Prevention */
+.prev-list{list-style:none}
+.prev-item{
+  display:flex;gap:8px;padding:.45rem 0;
+  font-size:.83rem;color:var(--muted);align-items:flex-start;
+  font-family:var(--font-deva);
+}
+.prev-dot{width:7px;height:7px;border-radius:50%;background:var(--g-mid);margin-top:5px;flex-shrink:0}
+
+.reset-btn{
+  width:100%;padding:.75rem;background:none;
+  border:2px solid var(--g3);color:var(--g3);
+  border-radius:12px;font-size:.88rem;font-weight:700;
+  cursor:pointer;margin-top:.75rem;transition:all .2s;
+  font-family:var(--font-deva);
+}
+.reset-btn:hover{background:var(--g-light)}
+
+/* Tips */
+.tip-item{display:flex;gap:8px;font-size:.83rem;color:var(--muted);padding:.35rem 0;align-items:flex-start;font-family:var(--font-deva)}
+.tip-dot{width:6px;height:6px;border-radius:50%;background:var(--g-mid);margin-top:5px;flex-shrink:0}
+
+/* CHATBOT */
+.chat-hdr{
+  background:var(--g1);color:#fff;
+  padding:.9rem 1.25rem;display:flex;
+  align-items:center;gap:10px;flex-shrink:0;
+}
+.chat-pulse{width:9px;height:9px;border-radius:50%;background:#4ade80;animation:pulse 2s infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.chat-ttl{font-weight:700;font-size:.95rem}
+.chat-powered{margin-left:auto;font-size:.7rem;opacity:.55}
+
+.chat-msgs{flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:.85rem}
+.chat-msgs::-webkit-scrollbar{width:4px}
+.chat-msgs::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+
+.chat-welcome{
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;height:100%;text-align:center;
+  padding:2rem;gap:1rem;
+}
+.wlc-emoji{font-size:4rem;animation:float 3s ease-in-out infinite}
+.wlc-title{font-size:1.2rem;font-weight:800;color:var(--g2);font-family:var(--font-deva)}
+.wlc-desc{font-size:.85rem;color:var(--muted);line-height:1.75;font-family:var(--font-deva)}
+.wlc-tips{
+  background:var(--g-light);border-radius:14px;
+  padding:.9rem 1.1rem;font-size:.82rem;color:var(--g1);
+  text-align:left;width:100%;line-height:1.9;
+  border:1px solid var(--border);font-family:var(--font-deva);
+}
+
+.msg{display:flex;flex-direction:column;max-width:82%}
+.msg.user{align-self:flex-end;align-items:flex-end}
+.msg.bot{align-self:flex-start;align-items:flex-start}
+.msg-from{font-size:.67rem;color:var(--muted);font-weight:700;margin-bottom:4px;letter-spacing:.4px;text-transform:uppercase}
+.msg-bubble{
+  padding:.75rem 1rem;border-radius:18px;
+  font-size:.87rem;line-height:1.75;white-space:pre-wrap;
+  font-family:var(--font-deva);
+}
+.msg.user .msg-bubble{
+  background:linear-gradient(135deg,var(--g3),var(--g4));
+  color:#fff;border-bottom-right-radius:4px;
+  box-shadow:0 4px 12px rgba(36,107,23,.3);
+}
+.msg.bot .msg-bubble{
+  background:#fff;border:1px solid var(--border);
+  border-bottom-left-radius:4px;color:var(--text);
+  box-shadow:0 2px 8px rgba(0,0,0,.06);
+}
+
+.typing-wrap{
+  display:flex;gap:5px;padding:.75rem 1rem;
+  background:#fff;border:1px solid var(--border);
+  border-radius:18px;border-bottom-left-radius:4px;
+  width:fit-content;box-shadow:0 2px 8px rgba(0,0,0,.06);
+}
+.t-dot{width:8px;height:8px;border-radius:50%;background:#9ca3af;animation:tdot 1.3s infinite}
+.t-dot:nth-child(2){animation-delay:.2s}
+.t-dot:nth-child(3){animation-delay:.4s}
+@keyframes tdot{0%,60%,100%{transform:translateY(0);background:#9ca3af}30%{transform:translateY(-9px);background:var(--g3)}}
+
+.qbar{padding:.65rem 1rem;background:#fff;border-top:1px solid var(--border);display:none}
+.qlbl{font-size:.67rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.4rem}
+.qchips{display:flex;flex-wrap:wrap;gap:.4rem}
+.qchip{
+  padding:.3rem .85rem;background:var(--g-pale);
+  border:1px solid var(--border);color:var(--g1);
+  border-radius:20px;font-size:.77rem;cursor:pointer;
+  transition:all .2s;font-family:var(--font-deva);
+}
+.qchip:hover{background:var(--g-light);border-color:var(--g3)}
+
+.chat-inp-bar{
+  padding:.75rem 1rem;background:#fff;
+  border-top:1px solid var(--border);
+  display:flex;gap:.5rem;align-items:center;
+}
+.chat-inp{
+  flex:1;padding:.72rem 1.1rem;
+  border:1.5px solid var(--border);border-radius:25px;
+  font-size:.88rem;outline:none;
+  background:var(--g-pale);transition:all .2s;
+  font-family:var(--font-deva);color:var(--text);
+}
+.chat-inp:focus{border-color:var(--g3);background:#fff}
+.send-btn{
+  width:44px;height:44px;border-radius:50%;
+  background:linear-gradient(135deg,var(--g3),var(--g4));
+  color:#fff;border:none;font-size:1rem;cursor:pointer;
+  transition:all .2s;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  box-shadow:0 4px 12px rgba(36,107,23,.3);
+}
+.send-btn:hover{transform:scale(1.08)}
+.send-btn:disabled{background:#9ca3af;box-shadow:none;transform:none;cursor:not-allowed}
+
+/* Loading overlay */
+.overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.6);
+  display:none;align-items:center;justify-content:center;
+  flex-direction:column;gap:1.25rem;z-index:9999;color:#fff;
+  backdrop-filter:blur(4px);
+}
+.overlay.show{display:flex}
+.spin{
+  width:56px;height:56px;
+  border:5px solid rgba(255,255,255,.2);
+  border-top-color:#fff;border-radius:50%;
+  animation:spin .8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-txt{font-size:1rem;font-weight:500;font-family:var(--font-deva)}
+
+/* Toast */
+.toast{
+  position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(100px);
+  background:var(--g1);color:#fff;padding:.75rem 1.5rem;
+  border-radius:25px;font-size:.875rem;font-weight:500;
+  box-shadow:0 8px 24px rgba(0,0,0,.2);z-index:9999;
+  transition:transform .3s cubic-bezier(.4,0,.2,1);
+  font-family:var(--font-deva);
+}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+@media(max-width:720px){
+  .layout{flex-direction:column;height:auto;overflow:visible}
+  .lpanel{width:100%;min-width:unset}
+  .rpanel{height:520px}
+  .hdr-brand p{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- SCREEN 1 — LANGUAGE SELECTION -->
+<div class="screen active" id="langScreen">
+  <div class="lang-card">
+    <span class="lang-logo">🌱</span>
+    <div class="lang-brand">Smart Farming AI</div>
+    <div class="lang-sub">Select your language / अपनी भाषा चुनें / तुमची भाषा निवडा</div>
+    <div class="lang-grid">
+      <button class="lang-opt" onclick="pickLang('en')">
+        <span class="lang-flag">🇬🇧</span>
+        <div><div class="lang-name">English</div><div class="lang-native">Continue in English</div></div>
+      </button>
+      <button class="lang-opt" onclick="pickLang('hi')">
+        <span class="lang-flag">🇮🇳</span>
+        <div><div class="lang-name">हिंदी</div><div class="lang-native">हिंदी में जारी रखें</div></div>
+      </button>
+      <button class="lang-opt" onclick="pickLang('mr')">
+        <span class="lang-flag">🇮🇳</span>
+        <div><div class="lang-name">मराठी</div><div class="lang-native">मराठीत सुरू ठेवा</div></div>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 2 — MAIN APP -->
+<div class="screen" id="appScreen">
+
+  <div class="hdr">
+    <div class="hdr-brand">
+      <span style="font-size:1.6rem">🌱</span>
+      <div>
+        <h1 id="hdrTitle">Smart Farming AI</h1>
+        <p id="hdrSub">AI-powered plant disease detection</p>
+      </div>
+    </div>
+    <div class="lang-pills">
+      <button class="lang-pill active" id="pill-en" onclick="switchLang('en')">EN</button>
+      <button class="lang-pill" id="pill-hi" onclick="switchLang('hi')">हि</button>
+      <button class="lang-pill" id="pill-mr" onclick="switchLang('mr')">म</button>
+    </div>
+  </div>
+
+  <div class="layout">
+
+    <!-- LEFT PANEL -->
+    <div class="lpanel">
+
+      <div class="pcard" id="upCard">
+        <div class="pcard-title" id="scanCardTitle">📷 Scan Your Leaf</div>
+        <div class="upzone" id="upZone">
+          <input type="file" id="fileInp" accept="image/*" capture="environment">
+          <span class="up-icon">🍃</span>
+          <div class="up-hint" id="upHint"><strong>Click to upload</strong> or drag photo here</div>
+        </div>
+        <img id="prevImg">
+        <button class="scan-btn" id="scanBtn" disabled>
+          <span id="scanBtnTxt">🔍 Analyse Leaf</span>
+        </button>
+      </div>
+
+      <div class="pcard" id="resCard">
+        <div class="pcard-title" id="resCardTitle">📊 Scan Result</div>
+
+        <div class="res-badge" id="resBadge">
+          <span class="res-icon" id="resIcon"></span>
+          <div>
+            <div class="res-name" id="resName"></div>
+            <div class="res-conf" id="resConf"></div>
+          </div>
+        </div>
+
+        <div class="cbar-wrap"><div class="cbar-fill" id="cbarFill"></div></div>
+
+        <div class="info-grid" id="infoGrid"></div>
+
+        <div class="ai-card">
+          <div class="ai-card-hdr">
+            <span style="font-size:1.3rem">🤖</span>
+            <span style="font-weight:700;font-size:.88rem" id="aiSumTitle">AI Summary</span>
+            <span class="ai-badge">Gemini AI</span>
+          </div>
+          <div class="ai-text" id="aiText">Loading...</div>
+        </div>
+
+        <div id="treatSec" style="display:none">
+          <div class="pcard-title" id="treatTitle" style="margin-bottom:.75rem">💊 Treatment Steps</div>
+          <ul class="treat-list" id="treatList"></ul>
+        </div>
+
+        <div id="prevSec" style="display:none;margin-top:.75rem">
+          <div class="pcard-title" id="prevTitle" style="margin-bottom:.6rem">🛡️ Prevention</div>
+          <ul class="prev-list" id="prevList"></ul>
+        </div>
+
+        <button class="reset-btn" onclick="resetScan()" id="resetBtn">🔄 Scan Another Leaf</button>
+      </div>
+
+      <div class="pcard" id="tipsCard">
+        <div class="pcard-title" id="tipsTitle">💡 Tips for Best Results</div>
+        <div id="tipsList"></div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT PANEL — CHATBOT -->
+    <div class="rpanel">
+      <div class="chat-hdr">
+        <div class="chat-pulse"></div>
+        <span class="chat-ttl" id="chatTitle">💬 AI Farming Advisor</span>
+        <span class="chat-powered" id="chatPowered">Powered by Gemini AI</span>
+      </div>
+
+      <div class="chat-msgs" id="chatMsgs">
+        <div class="chat-welcome" id="chatWelcome">
+          <div class="wlc-emoji">🌾</div>
+          <div class="wlc-title" id="wlcTitle">Hello, Farmer!</div>
+          <div class="wlc-desc" id="wlcDesc">Upload a leaf photo on the left for instant disease diagnosis. You can also ask me any farming question right now!</div>
+          <div class="wlc-tips" id="wlcTips">
+            <strong>You can ask me:</strong><br>
+            • How to treat plant diseases<br>
+            • When to water and fertilize<br>
+            • How to prevent disease<br>
+            • General farming advice
+          </div>
+        </div>
+      </div>
+
+      <div class="qbar" id="qBar">
+        <div class="qlbl" id="qLabel">Quick questions</div>
+        <div class="qchips" id="qChips"></div>
+      </div>
+
+      <div class="chat-inp-bar">
+        <input class="chat-inp" type="text" id="chatInp"
+          onkeydown="if(event.key==='Enter')sendMsg()">
+        <button class="send-btn" id="sendBtn" onclick="sendMsg()">➤</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Loading overlay -->
+<div class="overlay" id="overlay">
+  <div class="spin"></div>
+  <div class="loading-txt" id="loadTxt">Analysing...</div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════
+//  TRANSLATIONS
+// ══════════════════════════════════════
+const T = {
+  en:{
+    hdrSub        :'AI-powered plant disease detection',
+    scanCardTitle :'📷 Scan Your Leaf',
+    upHint        :'<strong>Click to upload</strong> or drag photo here',
+    scanBtn       :'🔍 Analyse Leaf',
+    scanningBtn   :'⏳ Analysing...',
+    resCardTitle  :'📊 Scan Result',
+    healthy       :'HEALTHY',
+    diseased      :'DISEASED',
+    confidence    :'Confidence',
+    aiSumTitle    :'AI Summary',
+    treatTitle    :'💊 Treatment Steps',
+    prevTitle     :'🛡️ Prevention Tips',
+    resetBtn      :'🔄 Scan Another Leaf',
+    tipsTitle     :'💡 Tips for Best Results',
+    tips:['Take photo in good natural light','Focus clearly on the affected leaf','Keep leaf flat and fully in frame','Avoid blurry or dark photos','One leaf per scan for best accuracy'],
+    chatTitle     :'💬 AI Farming Advisor',
+    chatPowered   :'Powered by Gemini AI',
+    wlcTitle      :'Hello, Farmer!',
+    wlcDesc       :'Upload a leaf photo on the left for instant disease diagnosis. You can also ask me any farming question right now!',
+    wlcTips       :'<strong>You can ask me:</strong><br>• How to treat plant diseases<br>• When to water and fertilize<br>• How to prevent disease<br>• General farming advice',
+    qLabel        :'Quick questions',
+    chatPH        :'Ask me anything about farming...',
+    qHealthy      :['How to keep it healthy?','When should I water?','Best fertilizer tips?','What to watch for?'],
+    qDiseased     :['How to apply treatment?','Is this contagious?','How long to recover?','Can I eat the fruit?','How to prevent next time?'],
+    loadTxt       :'Analysing your leaf with AI...',
+    pills         :['Status','Severity','Recovery','Confidence'],
+    firstHealthy  :(c)=>`Your plant is **healthy** with ${c}% confidence! 🎉\n\nAsk me anything about plant care, watering, or farming!`,
+    firstDiseased :(d,c,s,r)=>`I detected **${d}** (${c}% confidence).\n\nSeverity: ${s}\nExpected recovery: ${r}\n\nAsk me anything about treatment or prevention!`,
+    generalGreet  :'Hello Farmer! I am your AI farming advisor. Ask me anything about crops, diseases, watering, or farming!',
+  },
+  hi:{
+    hdrSub        :'AI-संचालित पौधे रोग पहचान',
+    scanCardTitle :'📷 अपनी पत्ती स्कैन करें',
+    upHint        :'<strong>अपलोड करने के लिए क्लिक करें</strong> या फोटो यहाँ खींचें',
+    scanBtn       :'🔍 पत्ती विश्लेषण करें',
+    scanningBtn   :'⏳ विश्लेषण हो रहा है...',
+    resCardTitle  :'📊 स्कैन परिणाम',
+    healthy       :'स्वस्थ',
+    diseased      :'रोगग्रस्त',
+    confidence    :'विश्वास',
+    aiSumTitle    :'AI सारांश',
+    treatTitle    :'💊 उपचार के कदम',
+    prevTitle     :'🛡️ रोकथाम के उपाय',
+    resetBtn      :'🔄 दूसरी पत्ती स्कैन करें',
+    tipsTitle     :'💡 बेहतर परिणाम के लिए सुझाव',
+    tips:['अच्छी प्राकृतिक रोशनी में फोटो लें','प्रभावित पत्ती पर स्पष्ट फोकस करें','पत्ती को सपाट और फ्रेम में रखें','धुंधली या अंधेरी फोटो से बचें','सर्वोत्तम सटीकता के लिए एक पत्ती प्रति स्कैन'],
+    chatTitle     :'💬 AI कृषि सलाहकार',
+    chatPowered   :'Gemini AI द्वारा संचालित',
+    wlcTitle      :'नमस्ते, किसान!',
+    wlcDesc       :'तुरंत रोग निदान के लिए बाईं ओर पत्ती की फोटो अपलोड करें। आप अभी कोई भी कृषि सवाल भी पूछ सकते हैं!',
+    wlcTips       :'<strong>आप मुझसे पूछ सकते हैं:</strong><br>• पौधे के रोगों का इलाज कैसे करें<br>• पानी और खाद कब दें<br>• रोग कैसे रोकें<br>• सामान्य कृषि सलाह',
+    qLabel        :'त्वरित प्रश्न',
+    chatPH        :'कृषि के बारे में कुछ भी पूछें...',
+    qHealthy      :['स्वस्थ कैसे रखें?','कब पानी दें?','खाद की सलाह?','क्या देखना चाहिए?'],
+    qDiseased     :['उपचार कैसे लगाएं?','क्या यह संक्रामक है?','ठीक होने में कितना समय?','फल खा सकते हैं?','अगली बार कैसे रोकें?'],
+    loadTxt       :'AI से पत्ती का विश्लेषण हो रहा है...',
+    pills         :['स्थिति','गंभीरता','ठीक होने का समय','विश्वास'],
+    firstHealthy  :(c)=>`आपका पौधा **स्वस्थ** है ${c}% विश्वास के साथ! 🎉\n\nपौधे की देखभाल के बारे में कुछ भी पूछें!`,
+    firstDiseased :(d,c,s,r)=>`मैंने **${d}** पाया (${c}% विश्वास)।\n\nगंभीरता: ${s}\nठीक होने का समय: ${r}\n\nउपचार या रोकथाम के बारे में पूछें!`,
+    generalGreet  :'नमस्ते किसान! मैं आपका AI कृषि सलाहकार हूं। फसल, रोग, पानी या खेती के बारे में कुछ भी पूछें!',
+  },
+  mr:{
+    hdrSub        :'AI-शक्तीचालित वनस्पती रोग ओळख',
+    scanCardTitle :'📷 तुमचे पान स्कॅन करा',
+    upHint        :'<strong>अपलोड करण्यासाठी क्लिक करा</strong> किंवा फोटो येथे ड्रॅग करा',
+    scanBtn       :'🔍 पान तपासा',
+    scanningBtn   :'⏳ तपासत आहे...',
+    resCardTitle  :'📊 स्कॅन निकाल',
+    healthy       :'निरोगी',
+    diseased      :'रोगग्रस्त',
+    confidence    :'विश्वास',
+    aiSumTitle    :'AI सारांश',
+    treatTitle    :'💊 उपचाराचे टप्पे',
+    prevTitle     :'🛡️ प्रतिबंधाचे उपाय',
+    resetBtn      :'🔄 दुसरे पान स्कॅन करा',
+    tipsTitle     :'💡 चांगल्या निकालासाठी टिप्स',
+    tips:['चांगल्या नैसर्गिक प्रकाशात फोटो काढा','प्रभावित पानावर स्पष्ट फोकस करा','पान सपाट आणि फ्रेममध्ये ठेवा','अंधुक किंवा अंधाऱ्या फोटोपासून दूर राहा','सर्वोत्तम अचूकतेसाठी एका वेळी एक पान'],
+    chatTitle     :'💬 AI शेती सल्लागार',
+    chatPowered   :'Gemini AI द्वारे चालविलेले',
+    wlcTitle      :'नमस्कार, शेतकरी!',
+    wlcDesc       :'त्वरित रोग निदानासाठी डाव्या बाजूला पानाचा फोटो अपलोड करा. तुम्ही आत्ता कोणताही शेतीचा प्रश्न देखील विचारू शकता!',
+    wlcTips       :'<strong>तुम्ही मला विचारू शकता:</strong><br>• वनस्पती रोगांवर उपचार कसे करावे<br>• पाणी आणि खत कधी द्यावे<br>• रोग कसे टाळावे<br>• सामान्य शेतीचा सल्ला',
+    qLabel        :'जलद प्रश्न',
+    chatPH        :'शेतीबद्दल काहीही विचारा...',
+    qHealthy      :['निरोगी कसे ठेवावे?','पाणी कधी द्यावे?','खताचा सल्ला?','काय पहावे?'],
+    qDiseased     :['उपचार कसा लावावा?','हे संसर्गजन्य आहे का?','बरे होण्यास किती वेळ?','फळ खाऊ शकतो का?','पुढच्या वेळी कसे टाळावे?'],
+    loadTxt       :'AI ने पान तपासत आहे...',
+    pills         :['स्थिती','तीव्रता','बरे होण्याचा कालावधी','विश्वास'],
+    firstHealthy  :(c)=>`तुमचे झाड **निरोगी** आहे ${c}% विश्वासासह! 🎉\n\nझाडाची काळजी किंवा शेतीबद्दल काहीही विचारा!`,
+    firstDiseased :(d,c,s,r)=>`मला **${d}** आढळला (${c}% विश्वास)।\n\nतीव्रता: ${s}\nबरे होण्याचा कालावधी: ${r}\n\nउपचार किंवा प्रतिबंधाबद्दल विचारा!`,
+    generalGreet  :'नमस्कार शेतकरी! मी तुमचा AI शेती सल्लागार आहे. पीक, रोग, पाणी किंवा शेतीबद्दल काहीही विचारा!',
+  }
+};
+
+// ══════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════
+const API  = '';
+let lang   = localStorage.getItem('sf_lang') || null;
+let session= null;
+let scanned= false;
+
+// ══════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════
+window.onload = () => {
+  if (lang) {
+    show('appScreen');
+    applyLang(lang);
+    enableChat();
+  } else {
+    show('langScreen');
+  }
+};
+
+// ══════════════════════════════════════
+//  LANGUAGE
+// ══════════════════════════════════════
+function pickLang(l) {
+  lang = l;
+  localStorage.setItem('sf_lang', l);
+  show('appScreen');
+  applyLang(l);
+  enableChat();
+}
+
+function switchLang(l) {
+  lang = l;
+  localStorage.setItem('sf_lang', l);
+  applyLang(l);
+}
+
+function applyLang(l) {
+  const t = T[l];
+  setTxt('hdrSub',       t.hdrSub);
+  setTxt('scanCardTitle',t.scanCardTitle);
+  setHtml('upHint',      t.upHint);
+  setTxt('scanBtnTxt',   t.scanBtn);
+  setTxt('resCardTitle', t.resCardTitle);
+  setTxt('aiSumTitle',   t.aiSumTitle);
+  setTxt('treatTitle',   t.treatTitle);
+  setTxt('prevTitle',    t.prevTitle);
+  setTxt('resetBtn',     t.resetBtn);
+  setTxt('tipsTitle',    t.tipsTitle);
+  setTxt('chatTitle',    t.chatTitle);
+  setTxt('chatPowered',  t.chatPowered);
+  setTxt('wlcTitle',     t.wlcTitle);
+  setTxt('wlcDesc',      t.wlcDesc);
+  setHtml('wlcTips',     t.wlcTips);
+  setTxt('qLabel',       t.qLabel);
+
+  const tl = document.getElementById('tipsList');
+  if(tl) tl.innerHTML = t.tips.map(tip=>
+    `<div class="tip-item"><div class="tip-dot"></div><span>${tip}</span></div>`
+  ).join('');
+
+  document.getElementById('chatInp').placeholder = t.chatPH;
+
+  ['en','hi','mr'].forEach(x=>
+    document.getElementById(`pill-${x}`)?.classList.toggle('active', x===l)
+  );
+}
+
+function setTxt(id,v){const e=document.getElementById(id);if(e&&v!=null)e.textContent=v}
+function setHtml(id,v){const e=document.getElementById(id);if(e&&v!=null)e.innerHTML=v}
+
+// ══════════════════════════════════════
+//  SCREEN
+// ══════════════════════════════════════
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ══════════════════════════════════════
+//  UPLOAD
+// ══════════════════════════════════════
+const upZone = document.getElementById('upZone');
+const fileInp= document.getElementById('fileInp');
+const prevImg= document.getElementById('prevImg');
+const scanBtn= document.getElementById('scanBtn');
+
+upZone.addEventListener('click',()=>fileInp.click());
+upZone.addEventListener('dragover',e=>{e.preventDefault();upZone.classList.add('over')});
+upZone.addEventListener('dragleave',()=>upZone.classList.remove('over'));
+upZone.addEventListener('drop',e=>{
+  e.preventDefault();upZone.classList.remove('over');
+  handleFile(e.dataTransfer.files[0]);
+});
+fileInp.addEventListener('change',e=>handleFile(e.target.files[0]));
+
+function handleFile(f) {
+  if(!f) return;
+  const r=new FileReader();
+  r.onload=e=>{
+    prevImg.src=e.target.result;
+    prevImg.style.display='block';
+    scanBtn.disabled=false;
+  };
+  r.readAsDataURL(f);
+}
+
+// ══════════════════════════════════════
+//  SCAN
+// ══════════════════════════════════════
+scanBtn.addEventListener('click', async () => {
+  const f=fileInp.files[0];
+  if(!f) return;
+  const t=T[lang];
+  showLoad(t.loadTxt);
+  scanBtn.disabled=true;
+  setTxt('scanBtnTxt',t.scanningBtn);
+
+  try {
+    const fd=new FormData();
+    fd.append('file',f);
+    fd.append('language', lang==='hi'?'Hindi':lang==='mr'?'Marathi':'English');
+
+    const res=await fetch(`${API}/predict`,{method:'POST',body:fd});
+    if(!res.ok) throw new Error(await res.text());
+    const data=await res.json();
+    session=data.session_id;
+    scanned=true;
+    showResult(data);
+    initChat(data);
+  } catch(err) {
+    showToast('Error: '+err.message);
+  } finally {
+    hideLoad();
+    scanBtn.disabled=false;
+    setTxt('scanBtnTxt',T[lang].scanBtn);
+  }
+});
+
+// ══════════════════════════════════════
+//  SHOW RESULT
+// ══════════════════════════════════════
+function showResult(data) {
+  const t=T[lang];
+  const ok=data.is_healthy;
+
+  const badge=document.getElementById('resBadge');
+  badge.className='res-badge '+(ok?'healthy':'diseased');
+  setTxt('resIcon',ok?'✅':'⚠️');
+  setTxt('resName',ok?t.healthy:t.diseased);
+  setTxt('resConf',t.confidence+': '+data.confidence.toFixed(1)+'%');
+
+  setTimeout(()=>document.getElementById('cbarFill').style.width=data.confidence+'%',100);
+
+  const lbs=t.pills;
+  const vls=[data.prediction,data.severity,data.recovery_days,data.confidence.toFixed(1)+'%'];
+  document.getElementById('infoGrid').innerHTML=lbs.map((l,i)=>
+    `<div class="info-cell"><div class="info-lbl">${l}</div><div class="info-val">${vls[i]}</div></div>`
+  ).join('');
+
+  setTxt('aiText',data.ai_summary||'...');
+
+  if(!ok&&data.treatment?.length){
+    document.getElementById('treatSec').style.display='block';
+    document.getElementById('treatList').innerHTML=
+      data.treatment.map((s,i)=>
+        `<li class="treat-item"><span class="treat-num">${i+1}</span><span>${s}</span></li>`
+      ).join('');
+  }
+
+  if(!ok&&data.prevention?.length){
+    document.getElementById('prevSec').style.display='block';
+    document.getElementById('prevList').innerHTML=
+      data.prevention.map(p=>
+        `<li class="prev-item"><div class="prev-dot"></div><span>${p}</span></li>`
+      ).join('');
+  }
+
+  document.getElementById('upCard').style.display ='none';
+  document.getElementById('resCard').style.display='block';
+  document.getElementById('tipsCard').style.display='none';
+}
+
+// ══════════════════════════════════════
+//  INIT CHAT AFTER SCAN
+// ══════════════════════════════════════
+function initChat(data) {
+  const t=T[lang];
+  const ok=data.is_healthy;
+  clearWelcome();
+
+  const chips=ok?t.qHealthy:t.qDiseased;
+  document.getElementById('qBar').style.display='block';
+  document.getElementById('qChips').innerHTML=
+    chips.map(q=>`<button class="qchip" onclick="sendQuick('${q}')">${q}</button>`).join('');
+
+  const d=data.class_name.replace(/_/g,' ').replace(/  /g,' ');
+  const msg=ok
+    ?t.firstHealthy(data.confidence.toFixed(1))
+    :t.firstDiseased(d,data.confidence.toFixed(1),data.severity,data.recovery_days);
+  addBot(msg);
+}
+
+// ══════════════════════════════════════
+//  CHAT
+// ══════════════════════════════════════
+function enableChat() {
+  document.getElementById('chatInp').disabled=false;
+  document.getElementById('sendBtn').disabled=false;
+  document.getElementById('chatInp').placeholder=T[lang].chatPH;
+}
+
+function clearWelcome() {
+  document.getElementById('chatMsgs').innerHTML='';
+}
+
+function addUser(txt) {
+  const wlc=document.getElementById('chatWelcome');
+  if(wlc) wlc.style.display='none';
+  const d=document.createElement('div');
+  d.className='msg user';
+  d.innerHTML=`<div class="msg-from">You</div><div class="msg-bubble">${esc(txt)}</div>`;
+  document.getElementById('chatMsgs').appendChild(d);
+  scrollChat();
+}
+
+function addBot(txt) {
+  const wlc=document.getElementById('chatWelcome');
+  if(wlc) wlc.style.display='none';
+  const d=document.createElement('div');
+  d.className='msg bot';
+  d.innerHTML=`<div class="msg-from">🌱 AI Advisor</div><div class="msg-bubble">${fmt(txt)}</div>`;
+  document.getElementById('chatMsgs').appendChild(d);
+  scrollChat();
+}
+
+function addTyping() {
+  const d=document.createElement('div');
+  d.className='msg bot';d.id='typing';
+  d.innerHTML=`<div class="msg-from">🌱 AI Advisor</div>
+    <div class="typing-wrap">
+      <div class="t-dot"></div><div class="t-dot"></div><div class="t-dot"></div>
+    </div>`;
+  document.getElementById('chatMsgs').appendChild(d);
+  scrollChat();
+}
+
+function removeTyping(){document.getElementById('typing')?.remove()}
+function scrollChat(){const c=document.getElementById('chatMsgs');c.scrollTop=c.scrollHeight}
+function fmt(txt){return esc(txt).replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>')}
+function esc(txt){return String(txt).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function sendQuick(q){document.getElementById('chatInp').value=q;sendMsg()}
+
+const LANG_NAME={en:'English',hi:'Hindi',mr:'Marathi'};
+
+async function sendMsg() {
+  const inp=document.getElementById('chatInp');
+  const msg=inp.value.trim();
+  if(!msg) return;
+  inp.value='';
+  addUser(msg);
+  addTyping();
+
+  const langTag=`\n\n[Respond only in ${LANG_NAME[lang]}]`;
+
+  if(!scanned) {
+    try {
+      const res=await fetch(`${API}/general-chat`,{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({message:msg+langTag,language:LANG_NAME[lang],username:'Farmer'})
+      });
+      const data=await res.json();
+      removeTyping();
+      addBot(data.response);
+    } catch {
+      removeTyping();
+      addBot(T[lang].generalGreet);
+    }
+    return;
+  }
+
+  try {
+    const res=await fetch(`${API}/chat`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({session_id:session,message:msg+langTag})
+    });
+    const data=await res.json();
+    removeTyping();
+    addBot(data.response);
+  } catch {
+    removeTyping();
+    addBot('Connection error. Please try again.');
+  }
+}
+
+// ══════════════════════════════════════
+//  RESET
+// ══════════════════════════════════════
+function resetScan() {
+  session=null;scanned=false;
+  fileInp.value='';
+  prevImg.style.display='none';prevImg.src='';
+  scanBtn.disabled=true;
+
+  document.getElementById('upCard').style.display ='block';
+  document.getElementById('resCard').style.display='none';
+  document.getElementById('tipsCard').style.display='block';
+  document.getElementById('treatSec').style.display='none';
+  document.getElementById('prevSec').style.display='none';
+  document.getElementById('cbarFill').style.width='0%';
+  document.getElementById('qBar').style.display='none';
+
+  const t=T[lang];
+  document.getElementById('chatMsgs').innerHTML=`
+    <div class="chat-welcome" id="chatWelcome">
+      <div class="wlc-emoji">🌾</div>
+      <div class="wlc-title">${t.wlcTitle}</div>
+      <div class="wlc-desc">${t.wlcDesc}</div>
+      <div class="wlc-tips">${t.wlcTips}</div>
+    </div>`;
+}
+
+// ══════════════════════════════════════
+//  LOADING + TOAST
+// ══════════════════════════════════════
+function showLoad(txt){
+  setTxt('loadTxt',txt);
+  document.getElementById('overlay').classList.add('show');
+}
+function hideLoad(){
+  document.getElementById('overlay').classList.remove('show');
+}
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+</script>
+</body>
+</html>

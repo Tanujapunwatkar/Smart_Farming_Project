@@ -1,0 +1,45 @@
+# 🔒 Virtual Environment
+venv/
+.venv/
+
+# 🐍 Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# 🔐 Environment file
+.env
+
+# 📂 Ignore your data & archive folders
+data/
+archive/
+
+# 📊 Model files (large)
+model/saved/
+*.keras
+*.h5
+*.pkl
+*.joblib
+
+# 📈 Evaluation outputs
+evaluation/outputs/
+
+# ⚙️ VS Code
+.vscode/
+
+# 📝 Logs
+*.log
+
+# 💻 OS files
+.DS_Store
+Thumbs.db
+
+# 🧪 Temp files
+tmp/
+temp/
+*.tmp
+
+# 🚫 Unwanted files
+np.ndarray
+pd.DataFrame

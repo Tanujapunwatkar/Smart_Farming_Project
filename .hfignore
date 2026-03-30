@@ -1,0 +1,24 @@
+# Ignore virtual environments
+venv/
+.venv/
+
+# Ignore model files
+model/saved/
+*.keras
+*.h5
+*.pkl
+*.joblib
+
+# Ignore data & archive
+data/
+archive/
+
+# Ignore caches & logs
+__pycache__/
+*.log
+evaluation/outputs/
+
+# Ignore temp files
+tmp/
+temp/
+*.tmp
