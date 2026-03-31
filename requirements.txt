@@ -1,8 +1,8 @@
 # ─────────────────────────────────────────────
 # CORE — image processing & ML
 # ─────────────────────────────────────────────
-tensorflow
-keras
+tensorflow == 2.21.0
+keras == 3.13.2
 numpy
 opencv-python
 scikit-learn
