@@ -2,9 +2,8 @@
 
 import numpy as np
 import cv2
-import tensorflow as tf
+import keras                          # ✅ standalone keras 3.13.2
 from huggingface_hub import hf_hub_download
-
 from ai_engine.solution_engine import get_full_solution
 
 IMG_SIZE = (64, 64)
@@ -12,7 +11,7 @@ THRESHOLD = 0.35
 
 _model = None
 
-# ✅ LOAD MODEL FROM HUGGING FACE (FINAL WORKING)
+# ✅ LOAD MODEL FROM HUGGING FACE
 def load_model():
     global _model
 
@@ -20,15 +19,19 @@ def load_model():
         try:
             print("⏳ Downloading model from Hugging Face...")
 
-            # Download the model file to local cache
             model_path = hf_hub_download(
                 repo_id="Tanupunwatkar/Smart_Farming_model",
-                filename="best_model.keras"
+                filename="best_model.keras",
+                cache_dir="/app/model_cache"
             )
             print("📁 Model downloaded to:", model_path)
 
-            # Load Keras model
-            _model = tf.keras.models.load_model(model_path, compile=False)
+            # ✅ Use keras directly, NOT tf.keras
+            _model = keras.models.load_model(
+                model_path,
+                compile=False,
+                safe_mode=False       # ✅ prevents deserialization errors
+            )
             print("✅ Model LOADED SUCCESSFULLY")
 
         except Exception as e:

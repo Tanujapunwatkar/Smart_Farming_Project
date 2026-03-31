@@ -1,4 +1,4 @@
-FROM python:3.10-slim
+FROM python:3.11-slim
 
 WORKDIR /app
 
@@ -7,6 +7,8 @@ RUN apt-get update && apt-get install -y libgl1 libglib2.0-0 && rm -rf /var/lib/
 
 # Copy only requirements first to leverage cache
 COPY requirements.txt .
+
+RUN pip install --upgrade pip
 
 # Install dependencies fast
 RUN pip install --no-cache-dir --prefer-binary -r requirements.txt
