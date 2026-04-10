@@ -8,3 +8,5 @@ pinned: false
 ---
 
 Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
+
+run command - python -m uvicorn deployment.app:app --reload --host 0.0.0.0 --port 8000
